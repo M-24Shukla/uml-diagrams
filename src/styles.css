@@ -705,6 +705,16 @@ label {
     width: 100%;
   }
 
+  .participants-section .section-title {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .participants-section .section-toggle {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
   .toolbar button,
   .add-buttons button,
   .anp-actions button,
