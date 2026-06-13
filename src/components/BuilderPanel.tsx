@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, Plus, Trash2 } from 'lucide-react';
 import type {
   ArrowKind,
@@ -117,6 +117,18 @@ export function BuilderPanel({ model, onChange }: BuilderPanelProps) {
     updateSteps([...model.steps, step]);
   };
 
+  const toggleFromHeaderSpace = (
+    event: MouseEvent<HTMLElement>,
+    toggle: () => void,
+  ) => {
+    const target = event.target as HTMLElement;
+    if (target.closest('button, input, select, textarea, label')) {
+      return;
+    }
+
+    toggle();
+  };
+
   return (
     <div className="builder">
       <section
@@ -124,7 +136,14 @@ export function BuilderPanel({ model, onChange }: BuilderPanelProps) {
           isParticipantsCollapsed ? 'is-collapsed' : ''
         }`}
       >
-        <div className="section-title">
+        <div
+          className="section-title"
+          onClick={(event) =>
+            toggleFromHeaderSpace(event, () =>
+              setIsParticipantsCollapsed((value) => !value),
+            )
+          }
+        >
           <button
             type="button"
             className="section-toggle"
@@ -158,73 +177,77 @@ export function BuilderPanel({ model, onChange }: BuilderPanelProps) {
         </div>
         {!isParticipantsCollapsed && (
           <div className="participant-list" id="participants-panel">
-            {model.participants.map((participant) => (
-              <div className="participant-row" key={participant.id}>
-                <input
-                  type="color"
-                  className="color-input"
-                  value={participant.color || '#ede9fe'}
-                  onChange={(event) =>
-                    updateParticipants(
-                      model.participants.map((item) =>
-                        item.id === participant.id
-                          ? { ...item, color: event.target.value }
-                          : item,
-                      ),
-                    )
-                  }
-                  aria-label={`Color for ${participant.name}`}
-                />
-                <select
-                  className="participant-type-select"
-                  value={participant.type || 'participant'}
-                  onChange={(event) =>
-                    updateParticipants(
-                      model.participants.map((item) =>
-                        item.id === participant.id
-                          ? {
-                              ...item,
-                              type: event.target.value as Participant['type'],
-                            }
-                          : item,
-                      ),
-                    )
-                  }
-                  aria-label={`Type for ${participant.name}`}
-                >
-                  <option value="actor">🧟‍♂️</option>
-                  <option value="participant">🫂</option>
-                </select>
-                <input
-                  ref={(node) => {
-                    participantRefs.current[participant.id] = node;
-                  }}
-                  value={participant.name}
-                  onChange={(event) =>
-                    updateParticipants(
-                      model.participants.map((item) =>
-                        item.id === participant.id
-                          ? { ...item, name: event.target.value }
-                          : item,
-                      ),
-                    )
-                  }
-                  aria-label={`Actor or participant ${participant.name}`}
-                />
-                <button
-                  type="button"
-                  className="icon-button"
-                  onClick={() =>
-                    updateParticipants(
-                      model.participants.filter((item) => item.id !== participant.id),
-                    )
-                  }
-                  aria-label={`Remove ${participant.name}`}
-                >
-                  <Trash2 size={15} />
-                </button>
-              </div>
-            ))}
+            {model.participants.length === 0 ? (
+              <p className="empty-state">No actors or participants created.</p>
+            ) : (
+              model.participants.map((participant) => (
+                <div className="participant-row" key={participant.id}>
+                  <input
+                    type="color"
+                    className="color-input"
+                    value={participant.color || '#ede9fe'}
+                    onChange={(event) =>
+                      updateParticipants(
+                        model.participants.map((item) =>
+                          item.id === participant.id
+                            ? { ...item, color: event.target.value }
+                            : item,
+                        ),
+                      )
+                    }
+                    aria-label={`Color for ${participant.name}`}
+                  />
+                  <select
+                    className="participant-type-select"
+                    value={participant.type || 'participant'}
+                    onChange={(event) =>
+                      updateParticipants(
+                        model.participants.map((item) =>
+                          item.id === participant.id
+                            ? {
+                                ...item,
+                                type: event.target.value as Participant['type'],
+                              }
+                            : item,
+                        ),
+                      )
+                    }
+                    aria-label={`Type for ${participant.name}`}
+                  >
+                    <option value="actor">A</option>
+                    <option value="participant">P</option>
+                  </select>
+                  <input
+                    ref={(node) => {
+                      participantRefs.current[participant.id] = node;
+                    }}
+                    value={participant.name}
+                    onChange={(event) =>
+                      updateParticipants(
+                        model.participants.map((item) =>
+                          item.id === participant.id
+                            ? { ...item, name: event.target.value }
+                            : item,
+                        ),
+                      )
+                    }
+                    aria-label={`Actor or participant ${participant.name}`}
+                  />
+                  <button
+                    type="button"
+                    className="icon-button"
+                    onClick={() =>
+                      updateParticipants(
+                        model.participants.filter((item) => item.id !== participant.id),
+                      )
+                    }
+                    aria-label={`Remove ${participant.name}`}
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                </div>
+              ))
+            )}
           </div>
         )}
       </section>
@@ -234,7 +257,14 @@ export function BuilderPanel({ model, onChange }: BuilderPanelProps) {
           isFlowCollapsed ? 'is-collapsed' : ''
         }`}
       >
-        <div className="section-title">
+        <div
+          className="section-title"
+          onClick={(event) =>
+            toggleFromHeaderSpace(event, () =>
+              setIsFlowCollapsed((value) => !value),
+            )
+          }
+        >
           <button
             type="button"
             className="section-toggle"
@@ -349,7 +379,9 @@ function StepList({
 
   return (
     <div className="step-list">
-      {steps.map((step, index) => {
+      {steps.length === 0 ? (
+        <p className="empty-state">No flow created.</p>
+      ) : steps.map((step, index) => {
         const isCollapsible = step.kind !== 'message';
         const isCollapsed = collapsedStepIds.has(step.id);
 

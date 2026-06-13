@@ -4,7 +4,7 @@ import type { Participant, ThemeMode } from '../types';
 
 type MermaidPreviewProps = {
   code: string;
-  participants: Participant[];
+  participants?: Participant[];
   theme: ThemeMode;
 };
 
@@ -20,7 +20,7 @@ const getErrorMessage = (error: unknown) => {
 
 export default function MermaidPreview({
   code,
-  participants,
+  participants = [],
   theme,
 }: MermaidPreviewProps) {
   const [svg, setSvg] = useState('');
@@ -28,6 +28,13 @@ export default function MermaidPreview({
   const debouncedCode = useDebouncedValue(code, 320);
 
   const mermaidTheme = useMemo(() => (theme === 'dark' ? 'dark' : 'default'), [theme]);
+  const participantColorSignature = useMemo(
+    () =>
+      participants
+        .map((participant) => `${participant.id}:${participant.name}:${participant.color}`)
+        .join('|'),
+    [participants],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -64,7 +71,7 @@ export default function MermaidPreview({
     return () => {
       cancelled = true;
     };
-  }, [debouncedCode, mermaidTheme, participants]);
+  }, [debouncedCode, mermaidTheme, participantColorSignature]);
 
   if (error) {
     return (

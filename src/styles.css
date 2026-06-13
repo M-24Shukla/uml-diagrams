@@ -115,6 +115,68 @@ label {
   gap: 5px;
 }
 
+.home-shell {
+  color: var(--text);
+  min-height: 100dvh;
+  padding: 34px clamp(16px, 4vw, 48px);
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto 20px;
+  max-width: 980px;
+}
+
+.home-header h1 {
+  font-size: 28px;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.home-header p {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 6px 0 0;
+}
+
+.diagram-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin: 0 auto;
+  max-width: 980px;
+}
+
+.diagram-card {
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  min-height: 96px;
+  padding: 16px;
+  text-align: left;
+  white-space: normal;
+  width: 100%;
+}
+
+.diagram-card span {
+  display: grid;
+  gap: 6px;
+}
+
+.diagram-card strong {
+  font-size: 16px;
+}
+
+.diagram-card small {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .app-shell {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
@@ -210,7 +272,7 @@ label {
 
 .pane-title h2,
 .section-title h3 {
-  font-size: 14px;
+  font-size: 15px;
   margin: 0;
 }
 
@@ -249,6 +311,10 @@ label {
   border: 0;
   min-height: 28px;
   padding: 0;
+}
+
+.section-title {
+  cursor: pointer;
 }
 
 .section-toggle:hover {
@@ -322,11 +388,188 @@ label {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.empty-state {
+  color: var(--muted);
+  font-size: 13px;
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 12px;
+  text-align: center;
+}
+
 .participant-row {
   display: grid;
   gap: 8px;
   grid-template-columns: auto 52px minmax(0, 1fr) auto;
   min-width: 0;
+}
+
+.class-section-body,
+.relationship-list {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px;
+}
+
+.visibility-legend {
+  align-items: center;
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.visibility-legend span {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.class-card-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.class-card,
+.relationship-card {
+  background: var(--panel);
+  border: 0;
+  border-radius: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.class-card {
+  border-left: 2px solid var(--line);
+  border-right: 2px solid var(--line);
+}
+
+.class-card-header {
+  align-items: center;
+  background: var(--panel-soft);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.class-name-input {
+  flex: 0 1 160px;
+  font-size: 13px;
+  font-weight: 700;
+  max-width: 160px;
+}
+
+.class-type-select {
+  flex: 0 0 130px;
+  font-size: 13px;
+  min-width: 130px;
+}
+
+.class-card-header .icon-button:last-child {
+  margin-left: auto;
+}
+
+.class-member-columns {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 10px;
+}
+
+.member-column {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.member-column-title {
+  align-items: center;
+  background: var(--panel-soft);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+}
+
+.member-column-title strong {
+  font-size: 13px;
+}
+
+.member-list {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+}
+
+.member-row {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.relationship-summary {
+  align-items: center;
+  background: var(--panel-soft);
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 8px 10px;
+}
+
+.relationship-summary p {
+  font-size: 13px;
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.relationship-summary span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.relationship-summary .relationship-accent {
+  color: inherit;
+  font-weight: 700;
+}
+
+.relationship-editor-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns:
+    minmax(110px, 1fr)
+    minmax(150px, 1.2fr)
+    minmax(110px, 1fr)
+    minmax(140px, 1.2fr);
+  padding: 10px;
+}
+
+.relationship-editor-grid input,
+.relationship-editor-grid select {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding-left: 0;
+}
+
+.relationship-editor-grid input:focus,
+.relationship-editor-grid select:focus {
+  background: transparent;
+  border-bottom-color: var(--accent);
+  outline: 0;
 }
 
 .color-input {
@@ -687,6 +930,14 @@ label {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .class-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .relationship-editor-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
 }
 
 @media (max-width: 620px) {
@@ -724,6 +975,28 @@ label {
 
   .message-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .class-member-columns,
+  .relationship-editor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .class-card-header {
+    flex-wrap: wrap;
+  }
+
+  .class-name-input {
+    flex: 1 1 130px;
+    max-width: none;
+  }
+
+  .class-type-select {
+    flex: 1 1 130px;
+  }
+
+  .relationship-summary span {
+    text-align: left;
   }
 
   .participant-list {
