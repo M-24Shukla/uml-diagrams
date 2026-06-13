@@ -3,6 +3,7 @@ import {
   Code2,
   Copy,
   Download,
+  Eye,
   Moon,
   Plus,
   RefreshCcw,
@@ -26,6 +27,8 @@ import {
 import type { DiagramModel, ThemeMode } from './types';
 import { BuilderPanel } from './components/BuilderPanel';
 
+type ActiveView = EditorMode | 'preview';
+
 const downloadText = (filename: string, content: string, type: string) => {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
@@ -44,6 +47,7 @@ function App() {
   const generatedCode = useMemo(() => generateMermaid(model), [model]);
   const [code, setCode] = useState(() => loadCode(generatedCode));
   const [mode, setMode] = useState<EditorMode>(() => loadMode());
+  const [activeView, setActiveView] = useState<ActiveView>(() => loadMode());
   const [theme, setTheme] = useState<ThemeMode>(() => loadTheme());
   const activeCode = mode === 'builder' ? generatedCode : code;
 
@@ -100,6 +104,11 @@ function App() {
     }
 
     setMode(nextMode);
+    setActiveView(nextMode);
+  };
+
+  const switchPreview = () => {
+    setActiveView('preview');
   };
 
   const downloadSvg = () => {
@@ -119,7 +128,7 @@ function App() {
         <div className="toolbar" aria-label="Diagram actions">
           <div className="segmented" aria-label="Editor mode">
             <button
-              className={mode === 'builder' ? 'active' : ''}
+              className={activeView === 'builder' ? 'active' : ''}
               type="button"
               onClick={() => switchMode('builder')}
             >
@@ -127,12 +136,22 @@ function App() {
               Builder
             </button>
             <button
-              className={mode === 'code' ? 'active' : ''}
+              className={activeView === 'code' ? 'active' : ''}
               type="button"
               onClick={() => switchMode('code')}
             >
               <Code2 size={16} />
               Code
+            </button>
+            <button
+              className={`preview-mode-button ${
+                activeView === 'preview' ? 'active' : ''
+              }`}
+              type="button"
+              onClick={switchPreview}
+            >
+              <Eye size={16} />
+              Preview
             </button>
           </div>
           <button type="button" onClick={resetExample} aria-label="Reset example">
@@ -166,12 +185,17 @@ function App() {
       </header>
 
       <section className="workspace">
-        <section className="pane editor-pane" aria-label="Diagram editor">
+        <section
+          className={`pane editor-pane ${
+            activeView === 'preview' ? 'is-hidden-view' : ''
+          }`}
+          aria-label="Diagram editor"
+        >
           <div className="pane-title">
             <h2>{mode === 'builder' ? 'Builder' : 'Mermaid Code'}</h2>
             {mode === 'builder' && <span>Generates Mermaid automatically</span>}
           </div>
-          {mode === 'builder' ? (
+          {activeView === 'builder' ? (
             <BuilderPanel model={model} onChange={setModel} />
           ) : (
             <textarea
@@ -184,7 +208,12 @@ function App() {
           )}
         </section>
 
-        <section className="pane preview-pane" aria-label="Live diagram preview">
+        <section
+          className={`pane preview-pane ${
+            activeView === 'preview' ? 'is-active-preview' : ''
+          }`}
+          aria-label="Live diagram preview"
+        >
           <div className="pane-title">
             <h2>Live Preview</h2>
             <span>{mode === 'builder' ? 'Generated Mermaid' : 'Raw Mermaid'}</span>
