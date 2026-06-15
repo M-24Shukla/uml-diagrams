@@ -214,6 +214,13 @@ label {
   gap: 8px;
 }
 
+.back-button {
+  aspect-ratio: 1;
+  min-height: 36px;
+  padding: 0;
+  width: 36px;
+}
+
 .segmented {
   background: var(--panel-soft);
   border: 1px solid var(--line);
@@ -304,6 +311,24 @@ label {
 
 .builder-section.is-collapsed {
   flex: 0 0 auto;
+}
+
+.builder input:not([type='color']),
+.builder select,
+.builder textarea {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.builder input:not([type='color']):focus,
+.builder select:focus,
+.builder textarea:focus {
+  border-bottom-color: var(--accent);
+  outline: 0;
 }
 
 .section-toggle {
@@ -570,6 +595,287 @@ label {
   background: transparent;
   border-bottom-color: var(--accent);
   outline: 0;
+}
+
+.activity-builder .section-title {
+  align-items: flex-start;
+}
+
+.activity-action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.activity-list {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px;
+}
+
+#activity-swimlanes-panel {
+  grid-template-columns: 1fr;
+}
+
+.activity-row {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.activity-swimlane-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-left: 4px solid #2563eb;
+  border-radius: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.activity-swimlane-card:nth-child(2n) {
+  border-left-color: #16a34a;
+}
+
+.activity-swimlane-card:nth-child(3n) {
+  border-left-color: #d97706;
+}
+
+.activity-swimlane-card:nth-child(4n) {
+  border-left-color: #7c3aed;
+}
+
+.activity-swimlane-card:nth-child(5n) {
+  border-left-color: #0891b2;
+}
+
+.activity-swimlane-card:nth-child(6n) {
+  border-left-color: #dc2626;
+}
+
+.activity-unassigned-card {
+  grid-column: 1 / -1;
+}
+
+.activity-unassigned-card .activity-swimlane-header {
+  grid-template-columns: 1fr;
+}
+
+.activity-swimlane-header {
+  align-items: center;
+  background: var(--panel-soft);
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 8px 10px;
+}
+
+.activity-swimlane-card.is-collapsed .activity-swimlane-header {
+  border-bottom: 0;
+}
+
+.activity-lane-toggle {
+  min-height: 30px;
+  padding: 0;
+  width: 30px;
+}
+
+.activity-swimlane-header strong {
+  font-size: 13px;
+}
+
+.activity-lane-actions {
+  border-bottom: 1px solid var(--line);
+  justify-content: flex-start;
+  padding: 8px 10px;
+}
+
+.activity-lane-node-list {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+}
+
+.activity-node-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+  padding: 10px;
+}
+
+.activity-node-card,
+.activity-transition-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  border-radius: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.activity-node-start {
+  border-left-color: #16a34a;
+}
+
+.activity-node-end {
+  border-left-color: #dc2626;
+}
+
+.activity-node-action {
+  border-left-color: #2563eb;
+}
+
+.activity-node-decision,
+.activity-node-loop {
+  border-left-color: #d97706;
+}
+
+.activity-node-merge {
+  border-left-color: #0891b2;
+}
+
+.activity-node-fork,
+.activity-node-join {
+  border-left-color: #111827;
+}
+
+.activity-card-header,
+.activity-transition-summary {
+  align-items: center;
+  background: var(--panel-soft);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 8px 10px;
+}
+
+.activity-card-header strong,
+.activity-transition-summary p {
+  font-size: 13px;
+  margin: 0;
+}
+
+.activity-transition-summary span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.activity-node-fields,
+.activity-transition-grid {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.activity-node-fields {
+  grid-template-columns: minmax(0, 1fr) minmax(110px, 0.65fr) minmax(130px, 0.8fr);
+}
+
+.activity-node-fields-compact {
+  grid-template-columns: minmax(0, 1fr) minmax(110px, 0.65fr);
+}
+
+.activity-transition-grid {
+  grid-template-columns: minmax(110px, 1fr) minmax(110px, 1fr) minmax(160px, 1.25fr);
+}
+
+.state-machine-builder .section-title {
+  align-items: flex-start;
+}
+
+.state-action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.state-card-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+  padding: 10px;
+}
+
+.state-card,
+.state-transition-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  border-radius: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.state-card-state {
+  border-left-color: #2563eb;
+}
+
+.state-card-start {
+  border-left-color: #16a34a;
+}
+
+.state-card-end {
+  border-left-color: #dc2626;
+}
+
+.state-card-choice {
+  border-left-color: #d97706;
+}
+
+.state-card-fork,
+.state-card-join {
+  border-left-color: #111827;
+}
+
+.state-card-header,
+.state-transition-summary {
+  align-items: center;
+  background: var(--panel-soft);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 8px 10px;
+}
+
+.state-card-header strong,
+.state-transition-summary p {
+  font-size: 13px;
+  margin: 0;
+}
+
+.state-transition-summary span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.state-editor-grid,
+.state-transition-grid {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.state-editor-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(100px, 0.65fr) minmax(130px, 0.8fr);
+}
+
+.state-transition-list {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 10px;
+}
+
+.state-transition-grid {
+  grid-template-columns: minmax(110px, 1fr) minmax(110px, 1fr) minmax(160px, 1.25fr);
 }
 
 .color-input {
@@ -934,6 +1240,25 @@ label {
     grid-template-columns: 1fr;
   }
 
+  #activity-swimlanes-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-node-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .activity-node-fields,
+  .activity-transition-grid,
+  .state-editor-grid,
+  .state-transition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .state-card-grid {
+    grid-template-columns: 1fr;
+  }
+
   .relationship-editor-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -951,7 +1276,9 @@ label {
 
   .toolbar,
   .add-buttons,
-  .anp-actions {
+  .anp-actions,
+  .activity-action-bar,
+  .state-action-bar {
     align-items: stretch;
     width: 100%;
   }
@@ -969,6 +1296,8 @@ label {
   .toolbar button,
   .add-buttons button,
   .anp-actions button,
+  .activity-action-bar button,
+  .state-action-bar button,
   .segmented {
     flex: 1 1 auto;
   }
@@ -978,7 +1307,9 @@ label {
   }
 
   .class-member-columns,
-  .relationship-editor-grid {
+  .relationship-editor-grid,
+  .state-editor-grid,
+  .state-transition-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1000,6 +1331,11 @@ label {
   }
 
   .participant-list {
+    grid-template-columns: 1fr;
+  }
+
+  #activity-swimlanes-panel,
+  .activity-node-grid {
     grid-template-columns: 1fr;
   }
 

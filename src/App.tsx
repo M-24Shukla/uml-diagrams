@@ -27,6 +27,12 @@ function App() {
     [path],
   );
 
+  useEffect(() => {
+    document.title = activeDiagram
+      ? `${activeDiagram.title} Builder | UML Diagram Studio`
+      : 'UML Diagram Studio | Visual Mermaid Diagram Builders';
+  }, [activeDiagram]);
+
   const navigate = (nextPath: string) => {
     const normalizedPath = normalizePath(nextPath);
     window.history.pushState({}, '', normalizedPath);

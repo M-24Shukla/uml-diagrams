@@ -12,26 +12,29 @@ import {
   Trash2,
 } from 'lucide-react';
 import MermaidPreview from '../components/MermaidPreview';
-import { BuilderPanel } from '../components/BuilderPanel';
-import { generateMermaid } from '../mermaidGenerator';
-import { parseMermaidToModel } from '../mermaidParser';
-import { defaultModel } from '../sample';
+import { StateMachineBuilder } from '../components/StateMachineBuilder';
+import { generateStateMachineMermaid } from '../stateMachineGenerator';
+import { parseStateMachineMermaidToModel } from '../stateMachineParser';
+import { defaultStateMachineModel } from '../stateMachineSample';
+import {
+  loadStateMachineCode,
+  loadStateMachineMode,
+  loadStateMachineModel,
+  saveStateMachineCode,
+  saveStateMachineMode,
+  saveStateMachineModel,
+} from '../stateMachineStorage';
 import {
   type EditorMode,
-  loadCode,
-  loadMode,
-  loadModel,
   loadTheme,
-  saveCode,
-  saveMode,
-  saveModel,
   saveTheme,
 } from '../storage';
-import type { DiagramModel, ThemeMode } from '../types';
+import type { StateMachineModel } from '../stateMachineTypes';
+import type { ThemeMode } from '../types';
 
 type ActiveView = EditorMode | 'preview';
 
-type SequenceDiagramPageProps = {
+type StateMachineDiagramPageProps = {
   onNavigateHome: () => void;
 };
 
@@ -48,21 +51,27 @@ const downloadText = (filename: string, content: string, type: string) => {
 const getSvgFromPreview = () =>
   document.querySelector<HTMLElement>('.preview-scroll svg')?.outerHTML ?? '';
 
-export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps) {
-  const [model, setModel] = useState<DiagramModel>(() => loadModel());
-  const generatedCode = useMemo(() => generateMermaid(model), [model]);
-  const [code, setCode] = useState(() => loadCode(generatedCode));
-  const [mode, setMode] = useState<EditorMode>(() => loadMode());
-  const [activeView, setActiveView] = useState<ActiveView>(() => loadMode());
+export function StateMachineDiagramPage({
+  onNavigateHome,
+}: StateMachineDiagramPageProps) {
+  const [model, setModel] = useState<StateMachineModel>(() =>
+    loadStateMachineModel(),
+  );
+  const generatedCode = useMemo(() => generateStateMachineMermaid(model), [model]);
+  const [code, setCode] = useState(() => loadStateMachineCode(generatedCode));
+  const [mode, setMode] = useState<EditorMode>(() => loadStateMachineMode());
+  const [activeView, setActiveView] = useState<ActiveView>(() =>
+    loadStateMachineMode(),
+  );
   const [theme, setTheme] = useState<ThemeMode>(() => loadTheme());
   const activeCode = mode === 'builder' ? generatedCode : code;
 
   useEffect(() => {
-    saveModel(model);
+    saveStateMachineModel(model);
   }, [model]);
 
   useEffect(() => {
-    saveCode(code);
+    saveStateMachineCode(code);
   }, [code]);
 
   useEffect(() => {
@@ -72,7 +81,7 @@ export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps
   }, [code, generatedCode, mode]);
 
   useEffect(() => {
-    saveMode(mode);
+    saveStateMachineMode(mode);
   }, [mode]);
 
   useEffect(() => {
@@ -81,17 +90,17 @@ export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps
   }, [theme]);
 
   const resetExample = () => {
-    const nextCode = generateMermaid(defaultModel);
-    setModel(defaultModel);
+    const nextCode = generateStateMachineMermaid(defaultStateMachineModel);
+    setModel(defaultStateMachineModel);
     setCode(nextCode);
   };
 
   const clearDiagram = () => {
-    const emptyModel: DiagramModel = {
-      participants: [],
-      steps: [],
+    const emptyModel: StateMachineModel = {
+      states: [],
+      transitions: [],
     };
-    const nextCode = generateMermaid(emptyModel);
+    const nextCode = generateStateMachineMermaid(emptyModel);
     setModel(emptyModel);
     setCode(nextCode);
     setMode('builder');
@@ -106,18 +115,18 @@ export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps
     setCode(nextCode);
 
     try {
-      setModel(parseMermaidToModel(nextCode, model));
+      setModel(parseStateMachineMermaidToModel(nextCode, model));
     } catch {
-      // Keep raw code editable; the preview remains responsible for syntax errors.
+      // Keep code mode editable; MermaidPreview handles syntax errors.
     }
   };
 
   const switchMode = (nextMode: EditorMode) => {
     if (nextMode === 'builder') {
       try {
-        setModel(parseMermaidToModel(code, model));
+        setModel(parseStateMachineMermaidToModel(code, model));
       } catch {
-        // If the raw code is invalid, keep the last valid builder model.
+        // Keep the last valid builder model if raw code is temporarily invalid.
       }
     }
 
@@ -128,7 +137,7 @@ export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps
   const downloadSvg = () => {
     const svg = getSvgFromPreview();
     if (svg) {
-      downloadText('sequence-diagram.svg', svg, 'image/svg+xml');
+      downloadText('state-machine-diagram.svg', svg, 'image/svg+xml');
     }
   };
 
@@ -136,8 +145,8 @@ export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps
     <main className="app-shell">
       <header className="topbar">
         <div>
-          <h1>Sequence Diagram Builder</h1>
-          <p>Build visually or edit Mermaid directly.</p>
+          <h1>State Machine Diagram Builder</h1>
+          <p>Model states, transitions, choices, forks, joins, and terminal paths.</p>
         </div>
         <div className="toolbar" aria-label="Diagram actions">
           <button type="button" className="back-button" onClick={onNavigateHome} aria-label="Back to home">
@@ -185,7 +194,9 @@ export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps
           </button>
           <button
             type="button"
-            onClick={() => downloadText('sequence-diagram.mmd', activeCode, 'text/plain')}
+            onClick={() =>
+              downloadText('state-machine-diagram.mmd', activeCode, 'text/plain')
+            }
             aria-label="Download Mermaid file"
           >
             <Download size={16} />
@@ -210,21 +221,21 @@ export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps
           className={`pane editor-pane ${
             activeView === 'preview' ? 'is-hidden-view' : ''
           }`}
-          aria-label="Diagram editor"
+          aria-label="State machine diagram editor"
         >
           <div className="pane-title">
             <h2>{mode === 'builder' ? 'Builder' : 'Mermaid Code'}</h2>
             {mode === 'builder' && <span>Generates Mermaid automatically</span>}
           </div>
           {activeView === 'builder' ? (
-            <BuilderPanel model={model} onChange={setModel} />
+            <StateMachineBuilder model={model} onChange={setModel} />
           ) : (
             <textarea
               className="code-editor"
               value={code}
               onChange={(event) => updateCode(event.target.value)}
               spellCheck={false}
-              aria-label="Mermaid sequence diagram code"
+              aria-label="Mermaid state machine diagram code"
             />
           )}
         </section>
@@ -239,11 +250,7 @@ export function SequenceDiagramPage({ onNavigateHome }: SequenceDiagramPageProps
             <h2>Live Preview</h2>
             <span>{mode === 'builder' ? 'Generated Mermaid' : 'Raw Mermaid'}</span>
           </div>
-          <MermaidPreview
-            code={activeCode}
-            participants={model.participants}
-            theme={theme}
-          />
+          <MermaidPreview code={activeCode} theme={theme} />
         </section>
       </section>
     </main>

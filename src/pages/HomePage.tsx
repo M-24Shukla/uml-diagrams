@@ -11,8 +11,8 @@ export function HomePage({ diagrams, onNavigate }: HomePageProps) {
     <main className="home-shell">
       <section className="home-header">
         <div>
-          <h1>Diagram Builder</h1>
-          <p>Choose a diagram tool and start building visually or from code.</p>
+          <h1>UML Diagram Studio</h1>
+          <p>Build Mermaid diagrams visually or from code.</p>
         </div>
       </section>
 

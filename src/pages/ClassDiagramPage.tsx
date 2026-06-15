@@ -4,7 +4,7 @@ import {
   Copy,
   Download,
   Eye,
-  Home,
+  ArrowLeft,
   Moon,
   Plus,
   RefreshCcw,
@@ -143,9 +143,8 @@ export function ClassDiagramPage({ onNavigateHome }: ClassDiagramPageProps) {
           <p>Build classes visually or edit Mermaid directly.</p>
         </div>
         <div className="toolbar" aria-label="Diagram actions">
-          <button type="button" onClick={onNavigateHome} aria-label="Go home">
-            <Home size={16} />
-            Home
+          <button type="button" className="back-button" onClick={onNavigateHome} aria-label="Back to home">
+            <ArrowLeft size={18} />
           </button>
           <div className="segmented" aria-label="Editor mode">
             <button
